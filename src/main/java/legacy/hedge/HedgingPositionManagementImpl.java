@@ -21,19 +21,12 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.apache.commons.lang3.SerializationUtils.*;
 
 public class HedgingPositionManagementImpl implements IHedgingPositionManagement {
 
 	private static int MAX_DECIMALS = 4;
 	private static Logger LOGGER = Logger.getLogger(HedgingPositionManagementImpl.class.getName());
-	private ITransactionManagerService transactionManagerService;
-	private DataAccessService dataAccessService;
-
-	public HedgingPositionManagementImpl(DataAccessService dataAccessService) {
-		this.dataAccessService = dataAccessService;
-		transactionManagerService = dataAccessService.getTransactionManagerService();
-	}
+	private ITransactionManagerService transactionManagerService = DataAccessService.getTransactionManagerService();
 
 	@Override
 	public CheckResult<HedgingPosition> initAndSendHedgingPosition(HedgingPosition hp) throws ARPSystemException {
