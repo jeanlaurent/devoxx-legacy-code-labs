@@ -14,11 +14,14 @@ import legacy.service.ITransactionManagerService;
 import legacy.service.TradingOrder;
 import legacy.dto.Transaction;
 import legacy.persistence.StorageActionEnum;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static org.apache.commons.lang3.SerializationUtils.*;
 
 public class HedgingPositionManagementImpl implements IHedgingPositionManagement {
 
@@ -96,7 +99,7 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 	}
 
 	private HedgingPosition updateHedgingPosition(HedgingPosition hp) {
-		HedgingPosition hpUpdate = null;
+		HedgingPosition hpUpdate = SerializationUtils.clone(hp);
 		try {
 			if (hp.getType().equals(HedgingPositionTypeConst.INI)) {
 				hpUpdate.setTransactionId(hp.getTransactionId());

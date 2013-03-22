@@ -8,7 +8,7 @@ public class ToweringXMLHTTPServiceClient {
 	public static HedgingPosition sendTicketToTowering(InputEvent event) {
 		for (int i = 0; i < 100; i++) {
 			buildHttpRequestAndSendToTowering(event);
-			System.out.println("[Sending to Towering HedgingPosition part#]" + i);
+			System.out.println("[remote] Sending HedgingPosition chunk #"+i+" to Towering");
 		}
 		return new HedgingPosition();
 	}

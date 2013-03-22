@@ -11,6 +11,8 @@ public class HedgingPositionMgt {
 		HedgingPosition returned = new HedgingPosition();
 		InputEvent event = new InputEvent(hp);
 		ToweringXMLHTTPServiceClient.sendTicketToTowering(event);
+		result.setCheckIsOk(true);
+		result.setResult(hp);
 		return result;
 	}
 

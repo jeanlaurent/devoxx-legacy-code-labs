@@ -12,6 +12,18 @@ public class FunkyTradingDataAccessServiceImpl implements ITradingDataAccessServ
 
 	@Override
 	public Transaction getTransactionById(int id) {
+		System.out.println("[remote] Enabling transaction to data center FX01 (Alabama, USA). Please wait.");
+		fakewait(2);
+		System.out.println("[remote] FX01 not responding");
+		System.out.println("[remote] Enabling transaction to data center FX07 (Honk-Kong). Please wait.");
+		fakewait(3);
+		System.out.println("[remote] Connection under way.");
+		fakewait(1);
+		System.out.println("[remote] Connection established.");
+		fakewait(1);
+		System.out.println("[remote] Checking Credentials.");
+		fakewait(1);
+		System.out.println("[remote] All systems go.");
 		Transaction transaction = new Transaction();
 		transaction.setCreDate(new Date());
 		Modif modif = new Modif();
@@ -38,7 +50,17 @@ public class FunkyTradingDataAccessServiceImpl implements ITradingDataAccessServ
 		}
 		transaction.setVersion(3);
 		transaction.setId(id);
+		System.out.println("[remote] MOTD: Cobol FTW !");
 		return transaction;
+	}
+
+	private void fakewait(int countInSeconds) {
+		try {
+			Thread.sleep(countInSeconds * 1000);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+
 	}
 
 	@Override

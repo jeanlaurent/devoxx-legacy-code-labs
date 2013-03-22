@@ -2,6 +2,7 @@ package legacy.persistence;
 
 import legacy.dto.Modif;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -28,7 +29,7 @@ import java.util.Date;
  *
  * @creationDate May 12, 2007
  */
-public abstract class ObjectDTO {
+public abstract class ObjectDTO  implements Serializable {
 
 	private static final long serialVersionUID = -1L;
 	/*

@@ -5,18 +5,14 @@ import legacy.service.funky.FunkyHedgingPositionDataAccessServiceImpl;
 import legacy.service.funky.FunkyTradingDataAccessServiceImpl;
 import legacy.service.funky.FunkyTransactionManagerService;
 
-import java.util.logging.Logger;
-
 public class DataAccessService {
 
-	private static Logger log = Logger.getLogger(DataAccessService.class.getName());
-
 	static {
-		log.info("==================================================");
-		log.info("=******===****===****===******===******===*******=");
-		log.info("=          DATA ACCESS SERVICE INITIATED         =");
-		log.info("=******===****===****===******===******===*******=");
-		log.info("==================================================");
+		System.out.println("==================================================");
+		System.out.println("=******===****===****===******===******===*******=");
+		System.out.println("=          DATA ACCESS SERVICE INITIATED         =");
+		System.out.println("=******===****===****===******===******===*******=");
+		System.out.println("==================================================");
 	}
 
 	/**
@@ -38,4 +34,5 @@ public class DataAccessService {
 	public static IAnalyticalService getAnalyticalService() {
 		return new FunkyAnalyticalService();
 	}
+
 }
