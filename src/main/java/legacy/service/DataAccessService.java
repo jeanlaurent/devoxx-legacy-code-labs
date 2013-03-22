@@ -21,18 +21,18 @@ public class DataAccessService {
 	 * @return
 	 */
 	public static ITransactionManagerService getTransactionManagerService() {
-		return null;
+		throw new RuntimeException("Can't reach service.");
 	}
 
 	public static ITradingDataAccessService getTradingDataAccessService() {
-		return null;
+		throw new RuntimeException("Can't reach service.");
 	}
 
 	public static IHedgingPositionDataAccessService getHedgingPositionDataAccessService() {
-		return null;
+		throw new RuntimeException("Can't reach service.");
 	}
 
 	public static IAnalyticalService getAnalyticalService() {
-		return null;
+		throw new RuntimeException("Can't reach service.");
 	}
 }
