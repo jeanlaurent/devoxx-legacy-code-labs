@@ -24,7 +24,13 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 
 	private static int MAX_DECIMALS = 4;
 	private static Logger LOGGER = Logger.getLogger(HedgingPositionManagementImpl.class.getName());
-	private ITransactionManagerService transactionManagerService = DataAccessService.getTransactionManagerService();
+	private ITransactionManagerService transactionManagerService;
+	private DataAccessService dataAccessService;
+
+	public HedgingPositionManagementImpl(DataAccessService dataAccessService) {
+		this.dataAccessService = dataAccessService;
+		transactionManagerService = dataAccessService.getTransactionManagerService();
+	}
 
 	@Override
 	public CheckResult<HedgingPosition> initAndSendHedgingPosition(HedgingPosition hp) throws ARPSystemException {
@@ -117,7 +123,7 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 		long dId = trading.getOptionalIdFromTransaction(transaction);
 
 		double price = hpdas.getPriceQuote(dId, transaction);
-		int dps = trading.computeDPSOnTheGrid(transaction.getOuterEdge());
+		long dps = trading.computeDPSOnTheGrid(transaction.getOuterEdge());
 		String combck = dId + " " + transaction.getId() + " CONTROL: [" + hpdas.getControl() + "]";
 		Date valueDate = new Date();
 		try {

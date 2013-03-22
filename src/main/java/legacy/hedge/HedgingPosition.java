@@ -28,7 +28,7 @@ public class HedgingPosition extends BaseDTO {
 	@AuditedField
 	private int transactionId;
 	@AuditedField
-	private HedgingPositionTypeConst type;
+	private HedgingPositionTypeConst type = HedgingPositionTypeConst.INI;
 	@AuditedField
 	private HedgingPositionStatusConst status;
 	@AuditedField

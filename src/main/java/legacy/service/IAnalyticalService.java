@@ -3,7 +3,7 @@ package legacy.service;
 import legacy.dto.Book;
 
 public interface IAnalyticalService {
-	Integer getRetrieveStockByActiveGK(Object id, String transactionWay);
+	Integer getRetrieveStockByActiveGK(Integer id, String transactionWay);
 
 	Book getBookByName(String bookName);
 }

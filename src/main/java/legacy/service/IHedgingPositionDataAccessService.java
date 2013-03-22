@@ -7,9 +7,9 @@ public interface IHedgingPositionDataAccessService {
 
 	long getPriceQuote(long dId, Transaction transaction);
 
-	String getHedgingTransactionIdByTransactionId(Object id);
-
-	TradingOrder getTrade(Object id);
-
 	String getHedgingPositionIdByPositionKey(String positionKey);
+
+	String getHedgingTransactionIdByTransactionId(int id);
+
+	TradingOrder getTrade(Integer id);
 }

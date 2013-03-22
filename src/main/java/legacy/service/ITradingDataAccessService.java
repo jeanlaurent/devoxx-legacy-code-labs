@@ -8,5 +8,5 @@ public interface ITradingDataAccessService {
 
 	int getOptionalIdFromTransaction(Transaction transaction);
 
-	int computeDPSOnTheGrid(Object id);
+	long computeDPSOnTheGrid(Long id);
 }

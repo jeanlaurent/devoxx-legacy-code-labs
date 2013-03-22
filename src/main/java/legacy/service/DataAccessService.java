@@ -1,6 +1,9 @@
 package legacy.service;
 
-import legacy.service.ITransactionManagerService;
+import legacy.service.funky.FunkyAnalyticalService;
+import legacy.service.funky.FunkyHedgingPositionDataAccessServiceImpl;
+import legacy.service.funky.FunkyTradingDataAccessServiceImpl;
+import legacy.service.funky.FunkyTransactionManagerService;
 
 import java.util.logging.Logger;
 
@@ -21,18 +24,18 @@ public class DataAccessService {
 	 * @return
 	 */
 	public static ITransactionManagerService getTransactionManagerService() {
-		throw new RuntimeException("Can't reach service.");
+		return new FunkyTransactionManagerService();
 	}
 
 	public static ITradingDataAccessService getTradingDataAccessService() {
-		throw new RuntimeException("Can't reach service.");
+		return new FunkyTradingDataAccessServiceImpl();
 	}
 
 	public static IHedgingPositionDataAccessService getHedgingPositionDataAccessService() {
-		throw new RuntimeException("Can't reach service.");
+		return new FunkyHedgingPositionDataAccessServiceImpl();
 	}
 
 	public static IAnalyticalService getAnalyticalService() {
-		throw new RuntimeException("Can't reach service.");
+		return new FunkyAnalyticalService();
 	}
 }
