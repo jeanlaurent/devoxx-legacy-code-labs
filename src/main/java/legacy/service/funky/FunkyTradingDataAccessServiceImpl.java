@@ -13,16 +13,16 @@ public class FunkyTradingDataAccessServiceImpl implements ITradingDataAccessServ
 	@Override
 	public Transaction getTransactionById(int id) {
 		System.out.println("[remote] Enabling transaction to data center FX01 (Alabama, USA). Please wait.");
-		fakewait(2);
+		synchronizationTimer(2);
 		System.out.println("[remote] FX01 not responding");
 		System.out.println("[remote] Enabling transaction to data center FX07 (Honk-Kong). Please wait.");
-		fakewait(3);
+		synchronizationTimer(3);
 		System.out.println("[remote] Connection under way.");
-		fakewait(1);
+		synchronizationTimer(1);
 		System.out.println("[remote] Connection established.");
-		fakewait(1);
+		synchronizationTimer(1);
 		System.out.println("[remote] Checking Credentials.");
-		fakewait(1);
+		synchronizationTimer(1);
 		System.out.println("[remote] All systems go.");
 		Transaction transaction = new Transaction();
 		transaction.setCreDate(new Date());
@@ -54,7 +54,7 @@ public class FunkyTradingDataAccessServiceImpl implements ITradingDataAccessServ
 		return transaction;
 	}
 
-	private void fakewait(int countInSeconds) {
+	private void synchronizationTimer(int countInSeconds) {
 		try {
 			Thread.sleep(countInSeconds * 1000);
 		} catch (InterruptedException e) {
