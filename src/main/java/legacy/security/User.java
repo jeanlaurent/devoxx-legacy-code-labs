@@ -1,4 +1,4 @@
-package legacy.legacy.security;
+package legacy.security;
 
 import legacy.persistence.BaseDTO;
 

@@ -2,11 +2,11 @@ package legacy.hedge;
 
 import legacy.DateTimeUtils;
 import legacy.dto.Modif;
-import legacy.legacy.security.User;
+import legacy.security.User;
 import legacy.error.ARPSystemException;
 import legacy.error.CheckResult;
 import legacy.dto.Book;
-import legacy.legacy.security.UserSessionsManager;
+import legacy.security.UserSessionsManager;
 import legacy.service.DataAccessService;
 import legacy.service.IHedgingPositionDataAccessService;
 import legacy.service.ITradingDataAccessService;

@@ -1,4 +1,4 @@
-package legacy.legacy.security;
+package legacy.security;
 
 public class UserSessionsManager {
 
