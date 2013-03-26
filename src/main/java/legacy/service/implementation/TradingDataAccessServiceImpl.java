@@ -1,4 +1,4 @@
-package legacy.service.funky;
+package legacy.service.implementation;
 
 import legacy.dto.DateRange;
 import legacy.dto.Modif;
@@ -8,7 +8,7 @@ import legacy.service.TransactionWay;
 
 import java.util.Date;
 
-public class FunkyTradingDataAccessServiceImpl implements ITradingDataAccessService {
+public class TradingDataAccessServiceImpl implements ITradingDataAccessService {
 
 	@Override
 	public Transaction getTransactionById(int id) {

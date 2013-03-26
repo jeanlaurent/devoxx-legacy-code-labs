@@ -1,9 +1,9 @@
 package legacy.service;
 
-import legacy.service.funky.FunkyAnalyticalService;
-import legacy.service.funky.FunkyHedgingPositionDataAccessServiceImpl;
-import legacy.service.funky.FunkyTradingDataAccessServiceImpl;
-import legacy.service.funky.FunkyTransactionManagerService;
+import legacy.service.implementation.AnalyticalService;
+import legacy.service.implementation.HedgingPositionDataAccessServiceImpl;
+import legacy.service.implementation.TradingDataAccessServiceImpl;
+import legacy.service.implementation.TransactionManagerService;
 
 public class DataAccessService {
 
@@ -20,19 +20,18 @@ public class DataAccessService {
 	 * @return
 	 */
 	public static ITransactionManagerService getTransactionManagerService() {
-		return new FunkyTransactionManagerService();
+		return new TransactionManagerService();
 	}
 
 	public static ITradingDataAccessService getTradingDataAccessService() {
-		return new FunkyTradingDataAccessServiceImpl();
+		return new TradingDataAccessServiceImpl();
 	}
 
 	public static IHedgingPositionDataAccessService getHedgingPositionDataAccessService() {
-		return new FunkyHedgingPositionDataAccessServiceImpl();
+		return new HedgingPositionDataAccessServiceImpl();
 	}
 
 	public static IAnalyticalService getAnalyticalService() {
-		return new FunkyAnalyticalService();
+		return new AnalyticalService();
 	}
-
 }

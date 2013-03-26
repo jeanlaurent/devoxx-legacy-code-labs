@@ -1,4 +1,4 @@
-package legacy.service.funky;
+package legacy.service.implementation;
 
 import com.google.common.base.Strings;
 import legacy.dto.Amount;
@@ -8,7 +8,7 @@ import legacy.service.TradingOrder;
 
 import java.util.Date;
 
-public class FunkyHedgingPositionDataAccessServiceImpl implements IHedgingPositionDataAccessService {
+public class HedgingPositionDataAccessServiceImpl implements IHedgingPositionDataAccessService {
 
 	@Override
 	public String getControl() {

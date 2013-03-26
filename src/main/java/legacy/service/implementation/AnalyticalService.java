@@ -1,4 +1,4 @@
-package legacy.service.funky;
+package legacy.service.implementation;
 
 import com.google.common.base.Strings;
 import legacy.dto.Book;
@@ -7,7 +7,7 @@ import legacy.service.IAnalyticalService;
 
 import java.util.Date;
 
-public class FunkyAnalyticalService implements IAnalyticalService {
+public class AnalyticalService implements IAnalyticalService {
 
 	@Override
 	public Integer getRetrieveStockByActiveGK(Integer id, String transactionWay) {
