@@ -1,5 +1,4 @@
-# devoxx-legacy-code-labs
-
+# Stratégie de testing de code legacy
 
 ## Pitch
 
@@ -11,6 +10,13 @@ Vous repartirez avec de bonnes notions de legacy testing, vous aurez decouvert d
 Plus d'information sur [la page du sujet](http://www.devoxx.com/display/FR13/Strategie+de+testing+de+code+legacy) sur devoxx.com
 
 
+## Horaire
+
+Mercredi 27 mars de 13h30 à 16h30 salle Louis Armstrong AB.
+
+Voir les [horaires des labs](http://www.devoxx.com/display/FR13/Lab+Day+1) sur devoxx.com
+
+
 ## Pré-requis
 
 * Un ordinateur avec un environnement de développement java.
@@ -19,9 +25,4 @@ Plus d'information sur [la page du sujet](http://www.devoxx.com/display/FR13/Str
 * maven ou un IDE le gérant
 * Nous trimballons 30m de cable et 2 bornes wifi mais si vous pouviez faires un `mvn install` ou équivalent **avant** de venir à la conférence, les dieux du réseau ne sont pas toujours avec nous…
 
-## Horaire
-
-Mercredi 27 mars de 13h30 à 16h30 salle Louis Armstrong AB.
-
-Voir les [horaires des labs](http://www.devoxx.com/display/FR13/Lab+Day+1) sur devoxx.com
 
