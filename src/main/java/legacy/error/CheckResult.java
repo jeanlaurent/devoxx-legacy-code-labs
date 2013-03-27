@@ -26,4 +26,12 @@ public class CheckResult<T>  implements Serializable {
 	public void setResult(T result) {
 		this.result = result;
 	}
+
+    @Override
+    public String toString() {
+        return "CheckResult{" +
+                "checkIsOk=" + checkIsOk +
+                ", result=" + result +
+                '}';
+    }
 }

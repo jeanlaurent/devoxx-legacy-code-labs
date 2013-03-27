@@ -138,4 +138,14 @@ public abstract class ObjectDTO  implements Serializable {
 			return null;
 		}
 	}
+
+    @Override
+    public String toString() {
+        return "ObjectDTO{" +
+                "updateDate=" + updateDate +
+                ", lastModificatin=" + lastModificatin +
+                ", version=" + version +
+                ", updateVersion=" + updateVersion +
+                '}';
+    }
 }
