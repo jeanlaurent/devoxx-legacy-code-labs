@@ -21,19 +21,22 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 
     private static Logger LOGGER = Logger.getLogger(HedgingPositionManagementImpl.class.getName());
 
-    private HedgingPositionMgt hedgingPositionMgt = new HedgingPositionMgt();
+    private HedgingPositionMgt hedgingPositionMgt;
+    private DataAccessService dataAccessService;
 
-    public void setHedgingPositionMgt(HedgingPositionMgt hedgingPositionMgt) {
-        this.hedgingPositionMgt = hedgingPositionMgt;
+    private ITransactionManagerService transactionManagerService;
+
+    public HedgingPositionManagementImpl() {
+        hedgingPositionMgt = new HedgingPositionMgt();
+        dataAccessService = new DataAccessService();
+        transactionManagerService = dataAccessService.getTransactionManagerService();
     }
 
-    private DataAccessService dataAccessService = new DataAccessService();
-
-    public void setDataAccessService(DataAccessService dataAccessService) {
+    protected HedgingPositionManagementImpl(DataAccessService dataAccessService, HedgingPositionMgt hedgingPositionMgt) {
         this.dataAccessService = dataAccessService;
+        this.hedgingPositionMgt = hedgingPositionMgt;
+        transactionManagerService = dataAccessService.getTransactionManagerService();
     }
-
-    private ITransactionManagerService transactionManagerService = dataAccessService.getTransactionManagerService();
 
     @Override
 	public CheckResult<HedgingPosition> initAndSendHedgingPosition(HedgingPosition hp) throws ARPSystemException {

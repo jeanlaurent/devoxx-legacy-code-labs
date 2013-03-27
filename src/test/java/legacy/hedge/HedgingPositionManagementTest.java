@@ -48,7 +48,6 @@ public class HedgingPositionManagementTest {
 
 
 
-        object.setHedgingPositionMgt(serviceBizare);
 
         DataAccessService dataAccessService = new DataAccessService() {
             @Override
@@ -61,7 +60,7 @@ public class HedgingPositionManagementTest {
             }
         };
 
-        object.setDataAccessService(dataAccessService);
+        object = new HedgingPositionManagementImpl(dataAccessService, serviceBizare);
     }
 
 
