@@ -8,10 +8,14 @@ public class CheckResult<T>  implements Serializable {
 
 	public CheckResult() {
 		// By default the check is ok
-		checkIsOk = true;
+        this(true);
 	}
 
-	public boolean isCheckIsOk() {
+    public CheckResult(boolean checkIsOk) {
+        this.checkIsOk = checkIsOk;
+    }
+
+    public boolean isCheckIsOk() {
 		return checkIsOk;
 	}
 

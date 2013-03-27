@@ -1,20 +1,15 @@
 package legacy.hedge;
 
 import legacy.DateTimeUtils;
+import legacy.dto.Book;
 import legacy.dto.Modif;
-import legacy.security.User;
+import legacy.dto.Transaction;
 import legacy.error.ARPSystemException;
 import legacy.error.CheckResult;
-import legacy.dto.Book;
-import legacy.security.UserSessionsManager;
-import legacy.service.DataAccessService;
-import legacy.service.IHedgingPositionDataAccessService;
-import legacy.service.ITradingDataAccessService;
-import legacy.service.ITransactionManagerService;
-import legacy.service.TradingOrder;
-import legacy.dto.Transaction;
 import legacy.persistence.StorageActionEnum;
-import org.apache.commons.lang3.SerializationUtils;
+import legacy.security.User;
+import legacy.security.UserSessionsManager;
+import legacy.service.*;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -42,53 +37,42 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 
     @Override
 	public CheckResult<HedgingPosition> initAndSendHedgingPosition(HedgingPosition hp) throws ARPSystemException {
-		CheckResult<HedgingPosition> result = new CheckResult<>();
+        CheckResult<HedgingPosition> result;
 		try {
 			hp = initHedgingPosition(hp);
+
+            try {
+                result = hedgePositionBySendTo3rdParty(hp);
+                hp = result.getResult();
+                if(result.isCheckIsOk()) {
+                    hp.setStatus(HedgingPositionStatusConst.HEDGED);
+                } else {
+                    switch(hp.getErrorLevel()){
+                        case FUNCTIONAL_ERROR:
+                        case CONNECT_ERROR:
+                            hp.setStatus(HedgingPositionStatusConst.REJECTED);
+                            break;
+                        case BOOKING_MALFUNCTION:
+                        default: {
+                            break;
+                        }
+                    }
+                }
+            } catch(ARPSystemException e) {
+                LOGGER.log(Level.SEVERE,e.getMessage(), e);
+                return new CheckResult<>();
+            }
 		} catch (Exception e) {
-			String errorMsg = "TECHNICAL ERROR, cannot initialize HP to send";
-			LOGGER.log(Level.SEVERE, errorMsg, e);
-			String msg = hp.getErrorLevel().createHMsgFromError();
-			hp.setHedgeMsg(msg);
-			result.setCheckIsOk(false);
-			try {
-				updateHedgingPosition(hp);
-			} catch (ARPSystemException e1) {
-				LOGGER.log(Level.SEVERE, errorMsg, e1);
-			}
-			return result;
+			LOGGER.log(Level.SEVERE, "TECHNICAL ERROR, cannot initialize HP to send", e);
+			hp.setHedgeMsg(hp.getErrorLevel().createHMsgFromError());
+		    result = new CheckResult<>(false);
 		}
-		try {
-			result = hedgePositionBySendTo3rdParty(hp);
-			if(result.isCheckIsOk()) {
-				hp = result.getResult();
-				hp.setStatus(HedgingPositionStatusConst.HEDGED);
-				updateHedgingPosition(hp);
-			} else {
-				hp = result.getResult();
-				switch(hp.getErrorLevel()){
-					case FUNCTIONAL_ERROR:{
-						hp.setStatus(HedgingPositionStatusConst.REJECTED);
-						break;
-					}
-					case CONNECT_ERROR: {
-						hp.setStatus(HedgingPositionStatusConst.REJECTED);
-						break;
-					}
-					case BOOKING_MALFUNCTION: {
-						//TO DO
-						break;
-					}
-					default: {
-						break;
-					}
-				}
-				updateHedgingPosition(hp);
-			}
-		} catch(ARPSystemException e) {
-			LOGGER.log(Level.SEVERE,e.getMessage(), e);
-		}
-		return result;
+        try {
+            updateHedgingPosition(hp);
+        } catch (ARPSystemException e1) {
+            LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
+        }
+        return result;
 	}
 
 	private CheckResult<HedgingPosition> hedgePositionBySendTo3rdParty(HedgingPosition hp) {
@@ -99,7 +83,8 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 		try {
 			if (hp.getType().equals(HedgingPositionTypeConst.INI)) {
 				Modif modif = new Modif();
-				modif.setCreDate(new Date());
+                // useless, it's default value in ObjectDTO.
+				//modif.setCreDate(new Date());
 				hp.setLastModification(modif);
 				hp.setStorageUpdate(StorageActionEnum.CREATE);
 			} else {
