@@ -121,17 +121,7 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 		hp.setIkRtH(userIni);
 		switch (hp.getType()) {
 			case INI: {
-				String transactionWay = "";
-				switch (transaction.getWay()) {
-					case LONG:
-						transactionWay = "L";
-						break;
-					case SHORT:
-						transactionWay = "S";
-						break;
-					default:
-						break;
-				}
+				String transactionWay = transaction.getWay().getValueForDto();
 				int bodCode;
 				Integer stock = dataAccessService.getAnalyticalService().getRetrieveStockByActiveGK(transaction.getId(), transactionWay);
 				TradingOrder evt = hpdas.getTrade(transaction.getId());
@@ -156,7 +146,6 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 				hp.setCombck(combck);
 				/*********************************** INPUT EVENT DATA *********************/
 				hp.setTransactionId(transaction.getId());
-				hp.setValueDate(valueDate);
 			}
 			case CANCEL_TRANSACTION:
 				/*********************************** INPUT DEAL DATA *********************/
@@ -164,7 +153,6 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 
 				hp.setCodetyptkt(20);
 				/*********************************** INPUT EVENT DATA *********************/
-				hp.setValueDate(valueDate);
 				break;
 			case EXT:
 				TradingOrder evt = hpdas.getTrade(transaction.getId());
@@ -184,26 +172,21 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 				/*********************************** INPUT EVENT DATA *********************/
 				Date issueDate = transaction.getIssueDate();
 				Date tradeDate = transaction.getTradeDate();
-				if (DateTimeUtils.compareDate(issueDate,tradeDate)) {
-					hp.setCreDate(issueDate);
-					hp.setDaprx(tradeDate);
-					hp.setDatefinthe(valueDate);
-				} else {
-					hp.setCreDate(issueDate);
-					hp.setDaprx(tradeDate);
-					hp.setDatefinthe(tradeDate);
+                hp.setCreDate(issueDate);
+                hp.setDaprx(tradeDate);
+                hp.setDatefinthe(valueDate);
+                if (!DateTimeUtils.compareDate(issueDate,tradeDate)) {
 					hp.setCombck(combck);
 				}
-				hp.setValueDate(valueDate);
 				break;
 			case CANCEL_POSITION:
 				/*********************************** INPUT DEAL DATA *********************/
 				hp.setCodetyptkt(20);
 				hp.setHedgingTransactionId(hedgingTransactionId);
 				/*********************************** INPUT EVENT DATA *********************/
-				hp.setValueDate(valueDate);
 				break;
-		}
+        }
+        hp.setValueDate(valueDate);
 
 		return hp;
  	}
