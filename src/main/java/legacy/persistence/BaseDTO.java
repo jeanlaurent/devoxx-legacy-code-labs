@@ -55,4 +55,11 @@ public class BaseDTO extends ObjectDTO {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+    @Override
+    public String toString() {
+        return "BaseDTO{" +
+                "id=" + id +
+                "} " + super.toString();
+    }
 }

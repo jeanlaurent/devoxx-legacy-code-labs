@@ -3,6 +3,7 @@ package legacy.hedge; /**
  *
  */
 
+import com.google.common.base.Objects;
 import legacy.error.ErrorLevel;
 import legacy.persistence.AuditedField;
 import legacy.persistence.BaseDTO;
@@ -277,4 +278,33 @@ public class HedgingPosition extends BaseDTO {
 	public String getHedgingTransactionId() {
 		return hedgingTransactionId;
 	}
+
+    @Override
+    public String toString() {
+        return "HedgingPosition{" +
+                "transactionId=" + transactionId +
+                ", type=" + type +
+                ", status=" + status +
+                ", valueDate=" + valueDate +
+                ", noticePeriodEndDate=" + noticePeriodEndDate +
+                ", combck='" + combck + '\'' +
+                ", codetyptkt=" + codetyptkt +
+                ", transactionWay='" + transactionWay + '\'' +
+                ", errorLevel=" + errorLevel +
+                ", hedgeMsg='" + hedgeMsg + '\'' +
+                ", storageAction=" + storageAction +
+                ", prxref=" + prxref +
+                ", basprx=" + basprx +
+                ", daprx=" + daprx +
+                ", quantity='" + quantity + '\'' +
+                ", datefinthe=" + datefinthe +
+                ", codtyptra=" + codtyptra +
+                ", msgdev='" + msgdev + '\'' +
+                ", msgerr='" + msgerr + '\'' +
+                ", niverr=" + niverr +
+                ", msgusr='" + msgusr + '\'' +
+                ", ikRtH='" + ikRtH + '\'' +
+                ", hedgingTransactionId='" + hedgingTransactionId + '\'' +
+                "} " + super.toString();
+    }
 }

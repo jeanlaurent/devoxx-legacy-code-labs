@@ -7,7 +7,7 @@ import legacy.service.implementation.TransactionManagerService;
 
 public class DataAccessService {
 
-	static {
+    public DataAccessService() {
 		System.out.println("==================================================");
 		System.out.println("=******===****===****===******===******===*******=");
 		System.out.println("=          DATA ACCESS SERVICE INITIATED         =");
@@ -19,19 +19,19 @@ public class DataAccessService {
 	 * get the transaction manager service
 	 * @return
 	 */
-	public static ITransactionManagerService getTransactionManagerService() {
+	public ITransactionManagerService getTransactionManagerService() {
 		return new TransactionManagerService();
 	}
 
-	public static ITradingDataAccessService getTradingDataAccessService() {
+	public ITradingDataAccessService getTradingDataAccessService() {
 		return new TradingDataAccessServiceImpl();
 	}
 
-	public static IHedgingPositionDataAccessService getHedgingPositionDataAccessService() {
+	public IHedgingPositionDataAccessService getHedgingPositionDataAccessService() {
 		return new HedgingPositionDataAccessServiceImpl();
 	}
 
-	public static IAnalyticalService getAnalyticalService() {
+	public IAnalyticalService getAnalyticalService() {
 		return new AnalyticalService();
 	}
 }

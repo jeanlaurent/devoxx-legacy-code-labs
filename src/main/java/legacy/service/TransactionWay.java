@@ -1,5 +1,15 @@
 package legacy.service;
 
 public enum TransactionWay {
-	LONG, SHORT;
+	LONG("L"), SHORT("S");
+
+    private String valueForDto;
+
+    private TransactionWay(String valueForDto) {
+        this.valueForDto = valueForDto;
+    }
+
+    public String getValueForDto() {
+        return valueForDto;
+    }
 }

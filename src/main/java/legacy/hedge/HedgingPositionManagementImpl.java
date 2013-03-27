@@ -1,20 +1,15 @@
 package legacy.hedge;
 
 import legacy.DateTimeUtils;
+import legacy.dto.Book;
 import legacy.dto.Modif;
-import legacy.security.User;
+import legacy.dto.Transaction;
 import legacy.error.ARPSystemException;
 import legacy.error.CheckResult;
-import legacy.dto.Book;
-import legacy.security.UserSessionsManager;
-import legacy.service.DataAccessService;
-import legacy.service.IHedgingPositionDataAccessService;
-import legacy.service.ITradingDataAccessService;
-import legacy.service.ITransactionManagerService;
-import legacy.service.TradingOrder;
-import legacy.dto.Transaction;
 import legacy.persistence.StorageActionEnum;
-import org.apache.commons.lang3.SerializationUtils;
+import legacy.security.User;
+import legacy.security.UserSessionsManager;
+import legacy.service.*;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -24,201 +19,160 @@ import java.util.logging.Logger;
 
 public class HedgingPositionManagementImpl implements IHedgingPositionManagement {
 
-	private static int MAX_DECIMALS = 4;
-	private static Logger LOGGER = Logger.getLogger(HedgingPositionManagementImpl.class.getName());
-	private ITransactionManagerService transactionManagerService = DataAccessService.getTransactionManagerService();
+    private static Logger LOGGER = Logger.getLogger(HedgingPositionManagementImpl.class.getName());
 
-	@Override
+    private HedgingPositionMgt hedgingPositionMgt;
+    private DataAccessService dataAccessService;
+
+    private ITransactionManagerService transactionManagerService;
+
+    public HedgingPositionManagementImpl() {
+        hedgingPositionMgt = new HedgingPositionMgt();
+        dataAccessService = new DataAccessService();
+        transactionManagerService = dataAccessService.getTransactionManagerService();
+    }
+
+    protected HedgingPositionManagementImpl(DataAccessService dataAccessService, HedgingPositionMgt hedgingPositionMgt) {
+        this.dataAccessService = dataAccessService;
+        this.hedgingPositionMgt = hedgingPositionMgt;
+        transactionManagerService = dataAccessService.getTransactionManagerService();
+    }
+
+    @Override
 	public CheckResult<HedgingPosition> initAndSendHedgingPosition(HedgingPosition hp) throws ARPSystemException {
-		CheckResult<HedgingPosition> result = new CheckResult<HedgingPosition>();
+        CheckResult<HedgingPosition> result;
 		try {
 			hp = initHedgingPosition(hp);
+
+            try {
+                result = hedgePositionBySendTo3rdParty(hp);
+                hp = result.getResult();
+                if(result.isCheckIsOk()) {
+                    hp.setStatus(HedgingPositionStatusConst.HEDGED);
+                } else {
+                    switch(hp.getErrorLevel()){
+                        case FUNCTIONAL_ERROR:
+                        case CONNECT_ERROR:
+                            hp.setStatus(HedgingPositionStatusConst.REJECTED);
+                            break;
+                        case BOOKING_MALFUNCTION:
+                        default: {
+                            break;
+                        }
+                    }
+                }
+            } catch(ARPSystemException e) {
+                LOGGER.log(Level.SEVERE,e.getMessage(), e);
+                return new CheckResult<>();
+            }
 		} catch (Exception e) {
-			String errorMsg = "TECHNICAL ERROR, cannot initialize HP to send";
-			LOGGER.log(Level.SEVERE, errorMsg, e);
-			String msg = hp.getErrorLevel().createHMsgFromError();
-			hp.setHedgeMsg(msg);
-			result.setCheckIsOk(false);
-			try {
-				updateHedgingPosition(hp);
-			} catch (ARPSystemException e1) {
-				LOGGER.log(Level.SEVERE, errorMsg, e1);
-			}
-			return result;
+			LOGGER.log(Level.SEVERE, "TECHNICAL ERROR, cannot initialize HP to send", e);
+			hp.setHedgeMsg(hp.getErrorLevel().createHMsgFromError());
+		    result = new CheckResult<>(false);
 		}
-		try {
-			result = hedgePositionBySendTo3rdParty(hp);
-			if(result.isCheckIsOk()) {
-				hp = result.getResult();
-				hp.setStatus(HedgingPositionStatusConst.HEDGED);
-				updateHedgingPosition(hp);
-			} else {
-				hp = result.getResult();
-				switch(hp.getErrorLevel()){
-					case FUNCTIONAL_ERROR:{
-						hp.setStatus(HedgingPositionStatusConst.REJECTED);
-						break;
-					}
-					case CONNECT_ERROR: {
-						hp.setStatus(HedgingPositionStatusConst.REJECTED);
-						break;
-					}
-					case BOOKING_MALFUNCTION: {
-						//TO DO
-						break;
-					}
-					default: {
-						break;
-					}
-				}
-				updateHedgingPosition(hp);
-			}
-		} catch(ARPSystemException e) {
-			LOGGER.log(Level.SEVERE,e.getMessage(), e);
-		}
-		return result;
+        try {
+            updateHedgingPosition(hp);
+        } catch (ARPSystemException e1) {
+            LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
+        }
+        return result;
 	}
 
 	private CheckResult<HedgingPosition> hedgePositionBySendTo3rdParty(HedgingPosition hp) {
-		if (LOGGER.isLoggable(Level.FINEST)) {
-			LOGGER.log(Level.FINEST,"Begin 3r party processing. stand by");
-		}
-		CheckResult<HedgingPosition> result;
-		result = HedgingPositionMgt.hedgingPositionMgt(hp);
-		if (LOGGER.isLoggable(Level.FINEST)) {
-			LOGGER.log(Level.FINEST,"3r party processing is now finished, thank you for your patience"); // t'es con michel
-		}
-		return result;
+		return hedgingPositionMgt.hedgingPositionMgt(hp);
 	}
 
 	private HedgingPosition updateHedgingPosition(HedgingPosition hp) {
-		HedgingPosition hpUpdate = SerializationUtils.clone(hp);
 		try {
 			if (hp.getType().equals(HedgingPositionTypeConst.INI)) {
-				hpUpdate.setTransactionId(hp.getTransactionId());
 				Modif modif = new Modif();
-				modif.setCreDate(new Date());
+                // useless, it's default value in ObjectDTO.
+				//modif.setCreDate(new Date());
 				hp.setLastModification(modif);
 				hp.setStorageUpdate(StorageActionEnum.CREATE);
-				hpUpdate = transactionManagerService.classStorageAction(hp);
 			} else {
 				hp.setStorageUpdate(StorageActionEnum.UPDATE);
-				hpUpdate = transactionManagerService.classStorageAction(hp);
 			}
+            return transactionManagerService.classStorageAction(hp);
 		} catch(Exception e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(),e);
 			throw e;
 		}
-		return hpUpdate;
 	}
 
 	private HedgingPosition initHedgingPosition(HedgingPosition hp) {
-		ITradingDataAccessService trading = DataAccessService.getTradingDataAccessService();
-		IHedgingPositionDataAccessService hpdas = DataAccessService.getHedgingPositionDataAccessService();
+		ITradingDataAccessService trading = dataAccessService.getTradingDataAccessService();
+		IHedgingPositionDataAccessService hpdas = dataAccessService.getHedgingPositionDataAccessService();
 		Transaction transaction = trading.getTransactionById(hp.getId());
 		long dId = trading.getOptionalIdFromTransaction(transaction);
 
 		double price = hpdas.getPriceQuote(dId, transaction);
-		long dps = trading.computeDPSOnTheGrid(transaction.getOuterEdge());
+        trading.computeDPSOnTheGrid(transaction.getOuterEdge());
 		String combck = dId + " " + transaction.getId() + " CONTROL: [" + hpdas.getControl() + "]";
-		Date valueDate = new Date();
-		try {
-			valueDate = hp.getValueDate();
-		} catch(Exception e) {
-			valueDate = transaction.getValueDate();
-		}
+		Date valueDate = hp.getValueDate();
 
-		String hedgingTransactionId = new String();
+		String hedgingTransactionId = "";
 		if (!HedgingPositionTypeConst.INI.equals(hp.getType())) {
 			hedgingTransactionId = hpdas.getHedgingTransactionIdByTransactionId(transaction.getId());
 		}
 		String userIni = getUser();
 		hp.setIkRtH(userIni);
 		switch (hp.getType()) {
-			case INI: {
-				String transactionWay = new String();
-				switch (transaction.getWay()) {
-					case LONG:
-						transactionWay = "L";
-						break;
-					case SHORT:
-						transactionWay = "S";
-						break;
-					default:
-						break;
-				}
-				int bodCode = 0;
-				Integer stock = DataAccessService.getAnalyticalService().getRetrieveStockByActiveGK(transaction.getId(), transactionWay);
-				TradingOrder evt = hpdas.getTrade(transaction.getId());
-				boolean isStockForbidden = false;
-				if (stock == null) {
-					isStockForbidden = true;
-				}
-				if (!isStockForbidden) {
-					Book book = DataAccessService.getAnalyticalService().getBookByName(transaction.getBookName());
+			case INI:
+				String transactionWay = transaction.getWay().getValueForDto();
+				Integer stock = dataAccessService.getAnalyticalService().getRetrieveStockByActiveGK(transaction.getId(), transactionWay);
+                TradingOrder evt = hpdas.getTrade(transaction.getId());
+                int bodCode;
+                if (stock != null) {
+					Book book = dataAccessService.getAnalyticalService().getBookByName(transaction.getBookName());
 					bodCode = book.getCode();
 				} else {
-					Book book = DataAccessService.getAnalyticalService().getBookByName(transaction.getBookName() + "-instock");
+					Book book = dataAccessService.getAnalyticalService().getBookByName(transaction.getBookName() + "-instock");
 					bodCode = Integer.parseInt(book.getPortfolioIdFromRank());
 				}
-				/*********************************** INPUT DEAL DATA *********************/
 				hp.setTransactionWay(transactionWay);
-				hp.setCodetyptkt(34);
 				hp.setCodtyptra(BigInteger.valueOf(bodCode));
 				hp.setQuantity(String.valueOf(evt.getPrice().getQuantity()));
 				hp.setBasprx(evt.getPrice().getFxPrice() / 100);
 				hp.setPrxref(evt.getPrice().getFxPrice());
 				hp.setCombck(combck);
-				/*********************************** INPUT EVENT DATA *********************/
 				hp.setTransactionId(transaction.getId());
-				hp.setValueDate(valueDate);
-			}
+                hpdas.getHedgingPositionIdByPositionKey(transaction.getPositionKey());
+                hp.setCodetyptkt(20);
+                break;
 			case CANCEL_TRANSACTION:
-				/*********************************** INPUT DEAL DATA *********************/
-				String hedgingPositionId = hpdas.getHedgingPositionIdByPositionKey(transaction.getPositionKey());
-
+                hpdas.getHedgingPositionIdByPositionKey(transaction.getPositionKey());
 				hp.setCodetyptkt(20);
-				/*********************************** INPUT EVENT DATA *********************/
-				hp.setValueDate(valueDate);
 				break;
 			case EXT:
-				TradingOrder evt = hpdas.getTrade(transaction.getId());
+				TradingOrder evtExt = hpdas.getTrade(transaction.getId());
 				double fxprice = -1d;
-				if (evt !=null ){
-					price = evt.getPrice().getPrice();
-					fxprice = evt.getPrice().getFxPrice();
+				if (evtExt !=null ){
+					price = evtExt.getPrice().getPrice();
+					fxprice = evtExt.getPrice().getFxPrice();
 				}
 				if (price > 0) {
 					price = price * fxprice;
 				}
-				/*********************************** INPUT DEAL DATA *********************/
 				hp.setBasprx(price / 100);
 				hp.setPrxref(price);
-				hp.setCodetyptkt(42);
-				hp.setQuantity(String.valueOf(evt.getPrice().getQuantity()));
-				/*********************************** INPUT EVENT DATA *********************/
+				hp.setQuantity(String.valueOf(evtExt.getPrice().getQuantity()));
 				Date issueDate = transaction.getIssueDate();
 				Date tradeDate = transaction.getTradeDate();
-				if (DateTimeUtils.compareDate(issueDate,tradeDate)) {
-					hp.setCreDate(issueDate);
-					hp.setDaprx(tradeDate);
-					hp.setDatefinthe(valueDate);
-				} else {
-					hp.setCreDate(issueDate);
-					hp.setDaprx(tradeDate);
-					hp.setDatefinthe(tradeDate);
+                hp.setCreDate(issueDate);
+                hp.setDaprx(tradeDate);
+                hp.setDatefinthe(valueDate);
+                if (!DateTimeUtils.compareDate(issueDate,tradeDate)) {
 					hp.setCombck(combck);
 				}
-				hp.setValueDate(valueDate);
+                hp.setCodetyptkt(42);
 				break;
 			case CANCEL_POSITION:
-				/*********************************** INPUT DEAL DATA *********************/
-				hp.setCodetyptkt(20);
-				hp.setHedgingTransactionId(hedgingTransactionId);
-				/*********************************** INPUT EVENT DATA *********************/
-				hp.setValueDate(valueDate);
+                hp.setHedgingTransactionId(hedgingTransactionId);
+                hp.setCodetyptkt(20);
 				break;
-		}
+        }
+        hp.setValueDate(valueDate);
 
 		return hp;
  	}
