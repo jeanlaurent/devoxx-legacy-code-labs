@@ -24,8 +24,7 @@ import java.util.logging.Logger;
 
 public class HedgingPositionManagementImpl implements IHedgingPositionManagement {
 
-	private static int MAX_DECIMALS = 4;
-	private static Logger LOGGER = Logger.getLogger(HedgingPositionManagementImpl.class.getName());
+    private static Logger LOGGER = Logger.getLogger(HedgingPositionManagementImpl.class.getName());
 
     private HedgingPositionMgt hedgingPositionMgt = new HedgingPositionMgt();
 
@@ -93,36 +92,24 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 	}
 
 	private CheckResult<HedgingPosition> hedgePositionBySendTo3rdParty(HedgingPosition hp) {
-		if (LOGGER.isLoggable(Level.FINEST)) {
-			LOGGER.log(Level.FINEST,"Begin 3r party processing. stand by");
-		}
-		CheckResult<HedgingPosition> result;
-		result = hedgingPositionMgt.hedgingPositionMgt(hp);
-		if (LOGGER.isLoggable(Level.FINEST)) {
-			LOGGER.log(Level.FINEST,"3r party processing is now finished, thank you for your patience"); // t'es con michel
-		}
-		return result;
+		return hedgingPositionMgt.hedgingPositionMgt(hp);
 	}
 
 	private HedgingPosition updateHedgingPosition(HedgingPosition hp) {
-		HedgingPosition hpUpdate = SerializationUtils.clone(hp);
 		try {
 			if (hp.getType().equals(HedgingPositionTypeConst.INI)) {
-				hpUpdate.setTransactionId(hp.getTransactionId());
 				Modif modif = new Modif();
 				modif.setCreDate(new Date());
 				hp.setLastModification(modif);
 				hp.setStorageUpdate(StorageActionEnum.CREATE);
-				hpUpdate = transactionManagerService.classStorageAction(hp);
 			} else {
 				hp.setStorageUpdate(StorageActionEnum.UPDATE);
-				hpUpdate = transactionManagerService.classStorageAction(hp);
 			}
+            return transactionManagerService.classStorageAction(hp);
 		} catch(Exception e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(),e);
 			throw e;
 		}
-		return hpUpdate;
 	}
 
 	private HedgingPosition initHedgingPosition(HedgingPosition hp) {
