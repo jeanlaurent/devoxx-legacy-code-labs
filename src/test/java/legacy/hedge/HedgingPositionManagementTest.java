@@ -18,7 +18,9 @@ package legacy.hedge;
 
 import legacy.error.CheckResult;
 import legacy.service.DataAccessService;
+import legacy.service.IAnalyticalService;
 import legacy.service.ITradingDataAccessService;
+import legacy.service.implementation.AnalyticalService;
 import legacy.service.implementation.TradingDataAccessServiceImpl;
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Before;
@@ -31,12 +33,14 @@ import static org.fest.assertions.api.Assertions.assertThat;
 public class HedgingPositionManagementTest {
 
     private HedgingPositionManagementImpl object;
+    private HedgingPositionMgt serviceBizare;
+    private DataAccessService dataAccessService;
 
     @Before
     public void setup() {
         object = new HedgingPositionManagementImpl();
 
-        HedgingPositionMgt serviceBizare = new HedgingPositionMgt(){
+        serviceBizare = new HedgingPositionMgt(){
             @Override
             public CheckResult<HedgingPosition> hedgingPositionMgt(HedgingPosition hp) {
                 CheckResult<HedgingPosition> result = new CheckResult<>();
@@ -47,9 +51,7 @@ public class HedgingPositionManagementTest {
         };
 
 
-
-
-        DataAccessService dataAccessService = new DataAccessService() {
+        dataAccessService = new DataAccessService() {
             @Override
             public ITradingDataAccessService getTradingDataAccessService() {
                 return new TradingDataAccessServiceImpl() {
@@ -150,6 +152,37 @@ public class HedgingPositionManagementTest {
         assertThat(hedgingPosition.getCreDate()).isNotNull();
         assertThat(hedgingPosition.getCreDate()).isAfterOrEqualsTo(dateBefore);
         assertThat(hedgingPosition.getCreDate()).isBeforeOrEqualsTo(dateAfter);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testForStock() {
+        HedgingPosition hp = new HedgingPosition();
+        hp.setType(HedgingPositionTypeConst.INI);
+
+        dataAccessService = new DataAccessService() {
+            @Override
+            public ITradingDataAccessService getTradingDataAccessService() {
+                return new TradingDataAccessServiceImpl() {
+                    @Override
+                    protected void synchronizationTimer(int countInSeconds) {
+                    }
+                };
+            }
+
+            @Override
+            public IAnalyticalService getAnalyticalService() {
+                return new AnalyticalService(){
+                    @Override
+                    public Integer getRetrieveStockByActiveGK(Integer id, String transactionWay) {
+                        return null;
+                    }
+                };
+            }
+        };
+
+        object = new HedgingPositionManagementImpl(dataAccessService, serviceBizare);
+
+        object.initAndSendHedgingPosition(hp);
     }
 
 
