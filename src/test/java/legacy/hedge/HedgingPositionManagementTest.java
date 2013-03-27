@@ -75,8 +75,6 @@ public class HedgingPositionManagementTest {
         assertThat(hedgingPosition.getCreDate()).isNotNull();
         assertThat(hedgingPosition.getCreDate()).isAfterOrEqualsTo(dateBefore);
         assertThat(hedgingPosition.getCreDate()).isBeforeOrEqualsTo(dateAfter);
-
-
     }
 
 
