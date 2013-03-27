@@ -26,13 +26,20 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 
 	private static int MAX_DECIMALS = 4;
 	private static Logger LOGGER = Logger.getLogger(HedgingPositionManagementImpl.class.getName());
-	private ITransactionManagerService transactionManagerService = DataAccessService.getTransactionManagerService();
 
     private HedgingPositionMgt hedgingPositionMgt = new HedgingPositionMgt();
 
     public void setHedgingPositionMgt(HedgingPositionMgt hedgingPositionMgt) {
         this.hedgingPositionMgt = hedgingPositionMgt;
     }
+
+    private DataAccessService dataAccessService = new DataAccessService();
+
+    public void setDataAccessService(DataAccessService dataAccessService) {
+        this.dataAccessService = dataAccessService;
+    }
+
+    private ITransactionManagerService transactionManagerService = dataAccessService.getTransactionManagerService();
 
     @Override
 	public CheckResult<HedgingPosition> initAndSendHedgingPosition(HedgingPosition hp) throws ARPSystemException {
@@ -119,8 +126,8 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 	}
 
 	private HedgingPosition initHedgingPosition(HedgingPosition hp) {
-		ITradingDataAccessService trading = DataAccessService.getTradingDataAccessService();
-		IHedgingPositionDataAccessService hpdas = DataAccessService.getHedgingPositionDataAccessService();
+		ITradingDataAccessService trading = dataAccessService.getTradingDataAccessService();
+		IHedgingPositionDataAccessService hpdas = dataAccessService.getHedgingPositionDataAccessService();
 		Transaction transaction = trading.getTransactionById(hp.getId());
 		long dId = trading.getOptionalIdFromTransaction(transaction);
 
@@ -154,17 +161,17 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 						break;
 				}
 				int bodCode;
-				Integer stock = DataAccessService.getAnalyticalService().getRetrieveStockByActiveGK(transaction.getId(), transactionWay);
+				Integer stock = dataAccessService.getAnalyticalService().getRetrieveStockByActiveGK(transaction.getId(), transactionWay);
 				TradingOrder evt = hpdas.getTrade(transaction.getId());
 				boolean isStockForbidden = false;
 				if (stock == null) {
 					isStockForbidden = true;
 				}
 				if (!isStockForbidden) {
-					Book book = DataAccessService.getAnalyticalService().getBookByName(transaction.getBookName());
+					Book book = dataAccessService.getAnalyticalService().getBookByName(transaction.getBookName());
 					bodCode = book.getCode();
 				} else {
-					Book book = DataAccessService.getAnalyticalService().getBookByName(transaction.getBookName() + "-instock");
+					Book book = dataAccessService.getAnalyticalService().getBookByName(transaction.getBookName() + "-instock");
 					bodCode = Integer.parseInt(book.getPortfolioIdFromRank());
 				}
 				/*********************************** INPUT DEAL DATA *********************/

@@ -54,7 +54,7 @@ public class TradingDataAccessServiceImpl implements ITradingDataAccessService {
 		return transaction;
 	}
 
-	private void synchronizationTimer(int countInSeconds) {
+	protected void synchronizationTimer(int countInSeconds) {
 		try {
 			Thread.sleep(countInSeconds * 1000);
 		} catch (InterruptedException e) {

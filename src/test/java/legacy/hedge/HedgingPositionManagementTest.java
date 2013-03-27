@@ -19,7 +19,10 @@ package legacy.hedge;
 import com.google.gson.Gson;
 import legacy.dto.InputEvent;
 import legacy.error.CheckResult;
+import legacy.service.DataAccessService;
+import legacy.service.ITradingDataAccessService;
 import legacy.service.ToweringXMLHTTPServiceClient;
+import legacy.service.implementation.TradingDataAccessServiceImpl;
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -45,6 +48,19 @@ public class HedgingPositionManagementTest {
 
 
         object.setHedgingPositionMgt(serviceBizare);
+
+        DataAccessService dataAccessService = new DataAccessService() {
+            @Override
+            public ITradingDataAccessService getTradingDataAccessService() {
+                return new TradingDataAccessServiceImpl() {
+                    @Override
+                    protected void synchronizationTimer(int countInSeconds) {
+                    }
+                };
+            }
+        };
+
+        object.setDataAccessService(dataAccessService);
 
         CheckResult<HedgingPosition> result = object.initAndSendHedgingPosition(new HedgingPosition());
 
