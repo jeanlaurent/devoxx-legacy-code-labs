@@ -16,7 +16,41 @@
  */
 package legacy.hedge;
 
+import com.google.gson.Gson;
+import legacy.dto.InputEvent;
+import legacy.error.CheckResult;
+import legacy.service.ToweringXMLHTTPServiceClient;
+import org.apache.commons.lang3.SerializationUtils;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import static org.mockito.Matchers.any;
+
 public class HedgingPositionManagementTest {
+
+    @Test
+    public void firstTest() {
+        HedgingPositionManagementImpl object = new HedgingPositionManagementImpl();
+
+        HedgingPositionMgt serviceBizare = new HedgingPositionMgt(){
+            @Override
+            public CheckResult<HedgingPosition> hedgingPositionMgt(HedgingPosition hp) {
+                CheckResult<HedgingPosition> result = new CheckResult<>();
+                result.setCheckIsOk(true);
+                result.setResult(SerializationUtils.clone(hp));
+                return result;
+            }
+        };
+
+
+
+        object.setHedgingPositionMgt(serviceBizare);
+
+        CheckResult<HedgingPosition> result = object.initAndSendHedgingPosition(new HedgingPosition());
+
+        System.out.println(result);
+
+    }
 
 
 }

@@ -28,7 +28,13 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 	private static Logger LOGGER = Logger.getLogger(HedgingPositionManagementImpl.class.getName());
 	private ITransactionManagerService transactionManagerService = DataAccessService.getTransactionManagerService();
 
-	@Override
+    private HedgingPositionMgt hedgingPositionMgt = new HedgingPositionMgt();
+
+    public void setHedgingPositionMgt(HedgingPositionMgt hedgingPositionMgt) {
+        this.hedgingPositionMgt = hedgingPositionMgt;
+    }
+
+    @Override
 	public CheckResult<HedgingPosition> initAndSendHedgingPosition(HedgingPosition hp) throws ARPSystemException {
 		CheckResult<HedgingPosition> result = new CheckResult<>();
 		try {
@@ -84,7 +90,7 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 			LOGGER.log(Level.FINEST,"Begin 3r party processing. stand by");
 		}
 		CheckResult<HedgingPosition> result;
-		result = HedgingPositionMgt.hedgingPositionMgt(hp);
+		result = hedgingPositionMgt.hedgingPositionMgt(hp);
 		if (LOGGER.isLoggable(Level.FINEST)) {
 			LOGGER.log(Level.FINEST,"3r party processing is now finished, thank you for your patience"); // t'es con michel
 		}
