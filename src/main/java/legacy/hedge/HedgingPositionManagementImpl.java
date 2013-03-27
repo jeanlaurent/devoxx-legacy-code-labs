@@ -30,7 +30,7 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 
 	@Override
 	public CheckResult<HedgingPosition> initAndSendHedgingPosition(HedgingPosition hp) throws ARPSystemException {
-		CheckResult<HedgingPosition> result = new CheckResult<HedgingPosition>();
+		CheckResult<HedgingPosition> result = new CheckResult<>();
 		try {
 			hp = initHedgingPosition(hp);
 		} catch (Exception e) {
@@ -119,16 +119,16 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 		long dId = trading.getOptionalIdFromTransaction(transaction);
 
 		double price = hpdas.getPriceQuote(dId, transaction);
-		long dps = trading.computeDPSOnTheGrid(transaction.getOuterEdge());
+        trading.computeDPSOnTheGrid(transaction.getOuterEdge());
 		String combck = dId + " " + transaction.getId() + " CONTROL: [" + hpdas.getControl() + "]";
-		Date valueDate = new Date();
+		Date valueDate;
 		try {
 			valueDate = hp.getValueDate();
 		} catch(Exception e) {
 			valueDate = transaction.getValueDate();
 		}
 
-		String hedgingTransactionId = new String();
+		String hedgingTransactionId = "";
 		if (!HedgingPositionTypeConst.INI.equals(hp.getType())) {
 			hedgingTransactionId = hpdas.getHedgingTransactionIdByTransactionId(transaction.getId());
 		}
@@ -136,7 +136,7 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 		hp.setIkRtH(userIni);
 		switch (hp.getType()) {
 			case INI: {
-				String transactionWay = new String();
+				String transactionWay = "";
 				switch (transaction.getWay()) {
 					case LONG:
 						transactionWay = "L";
@@ -147,7 +147,7 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 					default:
 						break;
 				}
-				int bodCode = 0;
+				int bodCode;
 				Integer stock = DataAccessService.getAnalyticalService().getRetrieveStockByActiveGK(transaction.getId(), transactionWay);
 				TradingOrder evt = hpdas.getTrade(transaction.getId());
 				boolean isStockForbidden = false;
@@ -175,7 +175,7 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 			}
 			case CANCEL_TRANSACTION:
 				/*********************************** INPUT DEAL DATA *********************/
-				String hedgingPositionId = hpdas.getHedgingPositionIdByPositionKey(transaction.getPositionKey());
+                hpdas.getHedgingPositionIdByPositionKey(transaction.getPositionKey());
 
 				hp.setCodetyptkt(20);
 				/*********************************** INPUT EVENT DATA *********************/
