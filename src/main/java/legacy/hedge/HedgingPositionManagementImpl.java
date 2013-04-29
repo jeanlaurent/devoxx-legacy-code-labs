@@ -107,7 +107,7 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 			}
 		} catch(Exception e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(),e);
-			throw e;
+			throw new RuntimeException(e);
 		}
 		return hpUpdate;
 	}
