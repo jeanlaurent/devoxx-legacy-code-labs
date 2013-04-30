@@ -1,7 +1,6 @@
 package legacy.service;
 
 import legacy.dto.InputEvent;
-import legacy.hedge.HedgingPosition;
 
 public class ToweringXMLHTTPServiceClient {
 

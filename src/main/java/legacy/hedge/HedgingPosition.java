@@ -98,7 +98,6 @@ public class HedgingPosition extends BaseDTO implements Position {
 	 *
 	 * @return type
 	 */
-	@Override
   public HedgingPositionTypeConst getType() {
 		return type;
 	}
@@ -111,7 +110,6 @@ public class HedgingPosition extends BaseDTO implements Position {
 		this.type = type;
 	}
 
-	@Override
   public HedgingPositionStatusConst getStatus() {
 		return status;
 	}

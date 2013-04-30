@@ -4,7 +4,7 @@
 
     <groupId>legacy.coding</groupId>
     <artifactId>Mayhem</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>6.3.22-summer-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>1.6</maven.compiler.source>
@@ -13,6 +13,14 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>legacy.coding</groupId>
+            <artifactId>mayhem-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/service/target/mayhem-service-7.12.33b-unchecked.jar</systemPath>
+        </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>

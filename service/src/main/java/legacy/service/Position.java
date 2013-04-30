@@ -1,8 +1,6 @@
 package legacy.service;
 
 import legacy.dto.ErrorLevel;
-import legacy.hedge.HedgingPositionStatusConst;
-import legacy.hedge.HedgingPositionTypeConst;
 import legacy.persistence.StorageActionEnum;
 
 import java.math.BigInteger;
@@ -10,10 +8,6 @@ import java.util.Date;
 
 public interface Position {
     int getTransactionId();
-
-    HedgingPositionTypeConst getType();
-
-    HedgingPositionStatusConst getStatus();
 
     Date getValueDate();
 
