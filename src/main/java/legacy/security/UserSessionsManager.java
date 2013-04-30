@@ -1,5 +1,18 @@
 package legacy.security;
 
+
+/**
+ * <p>
+ *     Title: legacy.error.UserSessionsManager
+ * </p>
+ * <P>
+ *     Description: Managers are expandable, so is this class.
+ * </P>
+ * @author gNostradamus
+ * @version 3
+ * @creationDate October 17, 2022
+ */
+
 public class UserSessionsManager {
 
 	private static final UserSessionsManager usmgr;

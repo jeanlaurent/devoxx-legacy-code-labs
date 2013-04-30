@@ -5,6 +5,14 @@ import legacy.dto.InputEvent;
 import legacy.service.ToweringXMLHTTPServiceClient;
 import org.apache.commons.lang3.SerializationUtils;
 
+/**
+ * <p>
+ *     Title: legacy.hedge.HedgingPositionMgt
+ * </p>
+ * @author rDumas
+ * @version 1.3
+ * @creationDate May 7, 2011
+ */
 public class HedgingPositionMgt {
 
 	public static CheckResult<HedgingPosition> hedgingPositionMgt(HedgingPosition hp) {

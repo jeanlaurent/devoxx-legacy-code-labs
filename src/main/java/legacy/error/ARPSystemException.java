@@ -1,5 +1,16 @@
 package legacy.error;
 
+/**
+ * <p>
+ *     Title: legacy.hedge.ARPSystemException
+ * </p>
+ * <P>
+ *     Description: TODO
+ * </P>
+ * @author kMinogue
+ * @version 5
+ * @creationDate May 9, 2011
+ */
 public class ARPSystemException extends RuntimeException {
 	/**
 	 *

@@ -17,7 +17,7 @@ import java.util.Date;
  *     Title: legacy.hedge.HedgingPosition
  * </p>
  * <P>
- *     Description: TODO
+ *     Description: bug, n: A son of a glitch.
  * </P>
  * @author mfugain
  * @version 10

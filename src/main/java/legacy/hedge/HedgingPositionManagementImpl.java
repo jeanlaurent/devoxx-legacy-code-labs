@@ -21,7 +21,19 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+/**
+ * <p>
+ *     Title: legacy.hedge.HPMgtImpl
+ * </p>
+ * <P>
+ *     Description: This is the main calculation "hub" of the Polka Application, this
+ *     class handle all sort of different type of HEdgingPosition, and calculate their
+ *     values according to the proper values.
+ * </P>
+ * @author cBrown
+ * @version 17.3b4 (revision b)
+ * @creationDate October 17, 2012
+ */
 public class HedgingPositionManagementImpl implements IHedgingPositionManagement {
 
 	private static int MAX_DECIMALS = 4;
