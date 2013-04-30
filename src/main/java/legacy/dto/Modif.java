@@ -1,10 +1,8 @@
 package legacy.dto;
 
-import legacy.persistence.BaseDTO;
-
 import java.util.Date;
 
-public class Modif extends BaseDTO {
+public class Modif {
 
 	private String auditableClassName = null;
 	private int DTOID= 0x0;

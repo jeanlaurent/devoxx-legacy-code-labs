@@ -97,7 +97,7 @@ public class HedgingPositionManagementImpl implements IHedgingPositionManagement
 			if (hp.getType().equals(HedgingPositionTypeConst.INI)) {
 				hpUpdate.setTransactionId(hp.getTransactionId());
 				Modif modif = new Modif();
-				modif.setCreDate(new Date());
+				modif.setModificationDate(new Date());
 				hp.setLastModification(modif);
 				hp.setStorageUpdate(StorageActionEnum.CREATE);
 				hpUpdate = transactionManagerService.classStorageAction(hp);

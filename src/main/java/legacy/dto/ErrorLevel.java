@@ -1,4 +1,4 @@
-package legacy.error;
+package legacy.dto;
 
 public enum ErrorLevel {
 	FUNCTIONAL_ERROR,

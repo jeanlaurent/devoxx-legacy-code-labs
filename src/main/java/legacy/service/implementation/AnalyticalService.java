@@ -27,7 +27,7 @@ public class AnalyticalService implements IAnalyticalService {
 		}
 		Book book = new Book(bookName, bookName.length());
 		Modif modif = new Modif();
-		modif.setCreDate(new Date());
+		modif.setModificationDate(new Date());
 		book.setLastModification(modif);
 		book.setName(bookName);
 		return book;

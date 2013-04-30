@@ -27,11 +27,10 @@ public class TradingDataAccessServiceImpl implements ITradingDataAccessService {
 		Transaction transaction = new Transaction();
 		transaction.setCreDate(new Date());
 		Modif modif = new Modif();
-		modif.setCreDate(new Date());
+		modif.setModificationDate(new Date());
 		modif.setAuditableClassName("transaction.class");
 		modif.setModificationDate(new Date());
 		modif.setVersion(id % 10);
-		modif.setUpdateVersion(modif.getVersion() + 1);
 		transaction.setLastModification(modif);
 		transaction.setUpdateVersion(id % 5);
 		transaction.setBookName("Golgoth Supra Book 200" + id % 10);

@@ -3,10 +3,11 @@ package legacy.hedge; /**
  *
  */
 
-import legacy.error.ErrorLevel;
+import legacy.dto.ErrorLevel;
 import legacy.persistence.AuditedField;
 import legacy.persistence.BaseDTO;
 import legacy.persistence.StorageActionEnum;
+import legacy.service.Position;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -22,7 +23,7 @@ import java.util.Date;
  * @version 10
  * @creationDate May 12, 2007
  */
-public class HedgingPosition extends BaseDTO {
+public class HedgingPosition extends BaseDTO implements Position {
 
 	/******************* Data required for processing*************************/
 	@AuditedField
@@ -80,7 +81,8 @@ public class HedgingPosition extends BaseDTO {
 	/**
 	 * @return the transactionId
 	 */
-	public int getTransactionId() {
+	@Override
+  public int getTransactionId() {
 		return transactionId;
 	}
 
@@ -96,7 +98,8 @@ public class HedgingPosition extends BaseDTO {
 	 *
 	 * @return type
 	 */
-	public HedgingPositionTypeConst getType() {
+	@Override
+  public HedgingPositionTypeConst getType() {
 		return type;
 	}
 
@@ -108,7 +111,8 @@ public class HedgingPosition extends BaseDTO {
 		this.type = type;
 	}
 
-	public HedgingPositionStatusConst getStatus() {
+	@Override
+  public HedgingPositionStatusConst getStatus() {
 		return status;
 	}
 
@@ -116,7 +120,8 @@ public class HedgingPosition extends BaseDTO {
 		this.status = status;
 	}
 
-	public Date getValueDate() {
+	@Override
+  public Date getValueDate() {
 		return valueDate;
 	}
 
@@ -124,7 +129,8 @@ public class HedgingPosition extends BaseDTO {
 		this.valueDate = valueDate;
 	}
 
-	public Date getNoticePeriodEndDate() {
+	@Override
+  public Date getNoticePeriodEndDate() {
 		return noticePeriodEndDate;
 	}
 
@@ -133,7 +139,8 @@ public class HedgingPosition extends BaseDTO {
 	}
 
 	// TODO: Rename this to CombockArray
-	public String getCombck() {
+	@Override
+  public String getCombck() {
 		return combck;
 	}
 
@@ -141,7 +148,8 @@ public class HedgingPosition extends BaseDTO {
 		this.combck = combck;
 	}
 
-	public BigInteger getCodtyptra() {
+	@Override
+  public BigInteger getCodtyptra() {
 		return codtyptra;
 	}
 
@@ -149,7 +157,8 @@ public class HedgingPosition extends BaseDTO {
 		this.codtyptra = codtyptra;
 	}
 
-	public int getCodetyptkt() {
+	@Override
+  public int getCodetyptkt() {
 		return codetyptkt;
 	}
 
@@ -157,7 +166,8 @@ public class HedgingPosition extends BaseDTO {
 		this.codetyptkt = codetyptkt;
 	}
 
-	public double getPrxref() {
+	@Override
+  public double getPrxref() {
 		return prxref;
 	}
 
@@ -165,7 +175,8 @@ public class HedgingPosition extends BaseDTO {
 		this.prxref = prxref;
 	}
 
-	public double getBasprx() {
+	@Override
+  public double getBasprx() {
 		return basprx;
 	}
 
@@ -173,7 +184,8 @@ public class HedgingPosition extends BaseDTO {
 		this.basprx = basprx;
 	}
 
-	public Date getDaprx() {
+	@Override
+  public Date getDaprx() {
 		return daprx;
 	}
 
@@ -181,7 +193,8 @@ public class HedgingPosition extends BaseDTO {
 		this.daprx = daprx;
 	}
 
-	public String getQuantity() {
+	@Override
+  public String getQuantity() {
 		return quantity;
 	}
 
@@ -190,7 +203,8 @@ public class HedgingPosition extends BaseDTO {
 		this.quantity = quantity;
 	}
 
-	public String getTransactionWay() {
+	@Override
+  public String getTransactionWay() {
 		return transactionWay;
 	}
 
@@ -198,7 +212,8 @@ public class HedgingPosition extends BaseDTO {
 		this.transactionWay = transactionWay;
 	}
 
-	public String getMsgdev() {
+	@Override
+  public String getMsgdev() {
 		return msgdev;
 	}
 
@@ -206,7 +221,8 @@ public class HedgingPosition extends BaseDTO {
 		this.msgdev = msgdev;
 	}
 
-	public String getMsgerr() {
+	@Override
+  public String getMsgerr() {
 		return msgerr;
 	}
 
@@ -214,7 +230,8 @@ public class HedgingPosition extends BaseDTO {
 		this.msgerr = msgerr;
 	}
 
-	public Integer getNiverr() {
+	@Override
+  public Integer getNiverr() {
 		return niverr;
 	}
 
@@ -222,7 +239,8 @@ public class HedgingPosition extends BaseDTO {
 		this.niverr = niverr;
 	}
 
-	public String getMsgusr() {
+	@Override
+  public String getMsgusr() {
 		return msgusr;
 	}
 
@@ -230,7 +248,8 @@ public class HedgingPosition extends BaseDTO {
 		this.msgusr = msgusr;
 	}
 
-	public ErrorLevel getErrorLevel() {
+	@Override
+  public ErrorLevel getErrorLevel() {
 		return errorLevel;
 	}
 
@@ -238,7 +257,8 @@ public class HedgingPosition extends BaseDTO {
 		this.errorLevel = errorLevel;
 	}
 
-	public String getHedgeMsg() {
+	@Override
+  public String getHedgeMsg() {
 		return hedgeMsg;
 	}
 
@@ -246,7 +266,8 @@ public class HedgingPosition extends BaseDTO {
 		this.hedgeMsg = hedgeMsg;
 	}
 
-	public Date getDatefinthe() {
+	@Override
+  public Date getDatefinthe() {
 		return datefinthe;
 	}
 
@@ -254,7 +275,8 @@ public class HedgingPosition extends BaseDTO {
 		this.datefinthe = datefinthe;
 	}
 
-	public StorageActionEnum getStorageUpdate() {
+	@Override
+  public StorageActionEnum getStorageUpdate() {
 		return storageAction;
 	}
 
@@ -266,7 +288,8 @@ public class HedgingPosition extends BaseDTO {
 		this.ikRtH = ikRtH;
 	}
 
-	public String getIkRtH() {
+	@Override
+  public String getIkRtH() {
 		return ikRtH;
 	}
 
@@ -274,7 +297,8 @@ public class HedgingPosition extends BaseDTO {
 		this.hedgingTransactionId = hedgingTransactionId;
 	}
 
-	public String getHedgingTransactionId() {
+	@Override
+  public String getHedgingTransactionId() {
 		return hedgingTransactionId;
 	}
 }

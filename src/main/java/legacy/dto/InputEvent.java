@@ -1,17 +1,17 @@
 package legacy.dto;
 
-import legacy.hedge.HedgingPosition;
 import legacy.persistence.BaseDTO;
+import legacy.service.Position;
 
 public class InputEvent extends BaseDTO {
 
-	private HedgingPosition hp;
+	private Position pos;
 
-	public InputEvent(HedgingPosition hp) {
-		this.hp = hp;
+	public InputEvent(Position pos) {
+		this.pos = pos;
 	}
 
-	public HedgingPosition getPosition() {
-		return hp;
+	public Position getPosition() {
+		return pos;
 	}
 }
